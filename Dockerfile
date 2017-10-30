@@ -6,7 +6,7 @@ MAINTAINER Lee Evans - www.ltscomputingllc.com
 
 # the WEBAPI_WAR argument is defaulted here to the WEBAPI war file for the required WebAPI release
 # optionally override the war file url when building this container using: --build-arg WEBAPI_WAR=<webapi war file name>
-ARG WEBAPI_WAR=WebAPI-1.0.0.war
+ARG WEBAPI_WAR=WebAPI-1.0.0-20171012.015044-844.war
 ENV WEBAPI_RELEASE=2.1.1
 
 # add a Tomcat server management web UI 'admin' user with default 'abc123' password!
@@ -25,10 +25,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /usr/local/tomcat/webapps
 
 # deploy the OHDSI WebAPI war file from the OHDSI CI Nexus repository
-ENV WEBAPI_WAR_URL=http://repo.ohdsi.org:8085/nexus/service/local/repositories/releases/content/org/ohdsi/WebAPI/1.0.0/$WEBAPI_WAR
+ENV WEBAPI_WAR_URL=http://repo.ohdsi.org:8085/nexus/content/repositories/snapshots/org/ohdsi/WebAPI/1.0.0-SNAPSHOT/$WEBAPI_WAR
 
-RUN wget $WEBAPI_WAR_URL \
-	&& mv /usr/local/tomcat/webapps/WebAPI*.war /usr/local/tomcat/webapps/WebAPI.war
+#RUN wget $WEBAPI_WAR_URL \
+	#&& mv /usr/local/tomcat/webapps/WebAPI*.war /usr/local/tomcat/webapps/WebAPI.war
+COPY WebAPI-1.0.0-20171012.015044-844.war /usr/local/tomcat/webapps/WebAPI.war
 
 # deploy latest released OHDSI Atlas web application
 RUN wget https://github.com/OHDSI/Atlas/archive/released.zip \
@@ -51,6 +52,9 @@ RUN unzip /usr/local/tomcat/webapps/atlas/data/achilles-synpuf-1k.zip -d /usr/lo
 
 # create directories for optional jdbc drivers, achilles data source reports and log files
 RUN mkdir -p /tmp/drivers /tmp/achilles-data-reports /var/log/supervisor
+
+# Copy the starschema bigquery JDBC driver
+COPY bqjdbc.jar /tmp/drivers
 
 # install supervisord configuration file
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
