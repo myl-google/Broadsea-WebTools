@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		wget \
 		unzip \
 		supervisor \
+		postgresql-client \
 	&& rm -rf /var/lib/apt/lists/*
 
 # deploy the OHDSI WEBAPI and OHDSI web applications to the Tomcat server
