@@ -54,7 +54,7 @@ RUN unzip /usr/local/tomcat/webapps/atlas/data/achilles-synpuf-1k.zip -d /usr/lo
 RUN mkdir -p /tmp/drivers /tmp/achilles-data-reports /var/log/supervisor
 
 # Copy the starschema bigquery JDBC driver
-COPY bqjdbc.jar /tmp/drivers
+COPY bqjdbc.jar /usr/local/tomcat/lib/ 
 
 # install supervisord configuration file
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
