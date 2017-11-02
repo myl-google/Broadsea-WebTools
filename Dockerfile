@@ -6,8 +6,8 @@ MAINTAINER Lee Evans - www.ltscomputingllc.com
 
 # the WEBAPI_WAR argument is defaulted here to the WEBAPI war file for the required WebAPI release
 # optionally override the war file url when building this container using: --build-arg WEBAPI_WAR=<webapi war file name>
-ARG WEBAPI_WAR=WebAPI-1.0.0-20171012.015044-844.war
-ENV WEBAPI_RELEASE=2.1.1
+ARG WEBAPI_WAR=WebAPI-2.2.0.war
+ENV WEBAPI_RELEASE=2.2.0
 
 # add a Tomcat server management web UI 'admin' user with default 'abc123' password!
 COPY tomcat-users.xml /usr/local/tomcat/conf/
@@ -26,11 +26,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /usr/local/tomcat/webapps
 
 # deploy the OHDSI WebAPI war file from the OHDSI CI Nexus repository
-ENV WEBAPI_WAR_URL=http://repo.ohdsi.org:8085/nexus/content/repositories/snapshots/org/ohdsi/WebAPI/1.0.0-SNAPSHOT/$WEBAPI_WAR
+#ENV WEBAPI_WAR_URL=http://repo.ohdsi.org:8085/nexus/content/repositories/snapshots/org/ohdsi/WebAPI/1.0.0-SNAPSHOT/$WEBAPI_WAR
 
 #RUN wget $WEBAPI_WAR_URL \
 	#&& mv /usr/local/tomcat/webapps/WebAPI*.war /usr/local/tomcat/webapps/WebAPI.war
-COPY WebAPI-1.0.0-20171012.015044-844.war /usr/local/tomcat/webapps/WebAPI.war
+COPY WebAPI-2.2.0.war /usr/local/tomcat/webapps/WebAPI.war
 
 # deploy latest released OHDSI Atlas web application
 RUN wget https://github.com/OHDSI/Atlas/archive/released.zip \
