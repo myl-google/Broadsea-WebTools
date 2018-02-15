@@ -44,21 +44,17 @@ RUN wget https://github.com/OHDSI/Penelope/archive/master.zip \
 	&& mv /usr/local/tomcat/webapps/Penelope-master /usr/local/tomcat/webapps/penelope \
 	&& rm -f master.zip
 
-# deploy demo SynPUF 1k simulated patients Achilles report data as an Atlas data source
-RUN mkdir -p /usr/local/tomcat/webapps/atlas/data
-COPY datasources.json /usr/local/tomcat/webapps/atlas/data/
-COPY achilles-synpuf-1k.zip /usr/local/tomcat/webapps/atlas/data/
-RUN unzip /usr/local/tomcat/webapps/atlas/data/achilles-synpuf-1k.zip -d /usr/local/tomcat/webapps/atlas/data/ \
-	&& rm -f /usr/local/tomcat/webapps/atlas/data/achilles-synpuf-1k.zip
-
-# create directories for optional jdbc drivers, achilles data source reports and log files
-RUN mkdir -p /tmp/drivers /tmp/achilles-data-reports /var/log/supervisor
+# create directories for optional jdbc drivers and the log files
+RUN mkdir -p /tmp/drivers /var/log/supervisor
 
 # Copy the starschema bigquery JDBC driver
 COPY bqjdbc.jar /usr/local/tomcat/lib/ 
 
 # install supervisord configuration file
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# install Atlas local configuration file
+COPY config-local.js /usr/local/tomcat/webapps/atlas/js/
 
 # install the bash shell deploy script that supervisord will run whenever the container is started
 COPY deploy-script.sh /usr/local/tomcat/bin/
