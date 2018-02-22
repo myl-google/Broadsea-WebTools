@@ -50,6 +50,11 @@ RUN mkdir -p /tmp/drivers /var/log/supervisor
 # Copy the starschema bigquery JDBC driver
 COPY bqjdbc.jar /usr/local/tomcat/lib/ 
 
+# Copy licenses
+RUN mkdir -p /ohdsi-deployment
+COPY LICENSE /ohdsi-deployment/Broadsea-Webtools.LICENSE
+COPY starschema.LICENSE /ohdsi-deployment/
+
 # install supervisord configuration file
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
